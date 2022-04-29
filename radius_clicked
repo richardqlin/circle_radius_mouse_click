@@ -1,0 +1,118 @@
+import pygame
+import time
+import random,string
+from pygame.locals import *
+pygame.init()
+width =1000
+height=600
+screen=pygame.display.set_mode((width,height))
+pygame.display.set_caption('Spac Vadré')
+black=(0,0,0)
+white=(255,255,255)
+red=(255,0,0)
+green=(0,255,0)
+blue=(0,0,255)
+
+r=20
+letters=string.ascii_lowercase
+
+print(letters)
+
+class Ball:
+    def __init__(self,x,y,color):
+        self.x=x
+        self.y=y
+        self.color=color
+     
+        self.radius = r
+        self.speedy = random.randint(1,4)
+        self.speedx = random.randint(1,4)
+        
+    def draw(self):
+        pygame.draw.circle(screen,self.color,(self.x,self.y),self.radius)
+        
+   
+    def move(self):
+        #self.x += self.speedx
+        if self.x >= width-r:
+            self.speedx= - random.randint(1,4)
+            self.color =(random.randint(0,255),random.randint(0,255),random.randint(0,255))
+        elif self.x<=r:
+            self.speedx = random.randint(1,4)
+            self.color =(random.randint(0,255),random.randint(0,255),random.randint(0,255))
+        #self.y += self.speedy
+        if self.y >= height-r:
+            self.speedy = - random.randint(1,4)
+            self.color =(random.randint(0,255),random.randint(0,255),random.randint(0,255))
+        elif self.y< r:
+            self.speedy = random.randint(1,4)
+            self.color =(random.randint(0,255),random.randint(0,255),random.randint(0,255))
+    
+    def check(self):
+        for event in pygame.event.get():
+            if event.type == QUIT:
+                pygame.quit()
+                exit()
+            if event.type==KEYDOWN:
+                if event.key ==K_UP:
+                    self.radius +=2
+
+                if event.key ==K_DOWN: 
+                    self.radius -=2
+
+
+b = []
+
+
+for x in range(10):
+    b.append(Ball(random.randint(0,1000),random.randint(0,600),(random.randint(0,255),random.randint(0,255),random.randint(0,255))))
+
+
+r=0 
+game = True
+
+rx=0
+ry=0
+while game:
+    pygame.time.delay(5)
+    for a in b:
+        a.draw()
+        a.move()
+       
+        
+      
+       
+    pygame.display.update()
+    screen.fill(black)
+   
+
+    for event in pygame.event.get():
+        if event.type == QUIT:
+            pygame.quit()
+            exit()
+        if event.type == MOUSEBUTTONDOWN:
+                
+            for a in b:
+                
+                if event.pos[0] in range(a.x -a.radius,a.x+a.radius)and event.pos[1] in range(a.y -a.radius,a.y+a.radius):
+                    if event.button == 1:
+                        a.radius += 2
+                    if event.button ==3:
+                        if a.radius >2:
+                            a.radius -= 2
+                
+                
+        if event.type==KEYDOWN:
+            for a in b:
+                               
+                    if event.key ==K_UP:
+                        a.radius += 2
+
+                    if event.key ==K_DOWN:
+                        a.radius -= 2
+                    if a.radius <=2:
+                        a.radius =2
+            
+               
+                
+
